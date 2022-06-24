@@ -1,22 +1,21 @@
-Welcome to Lumache's documentation!
-===================================
+FOCAS 2 Gateway
+===============
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+**FOCAS 2 Gateway** possibilita usuários a extraírem 
+informações e dados de comandos numéricos da marca Fanuc 
+através do seu protocolo proprietário ``FOCAS 2`` (somente via Ethernet). 
+Todas as informações coletadas e configurações do app durante
+sua execução são disponibilizadas na interface 
+``ctrlX Datalayer``.
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+Visite a página oficial *Bosch Rexroth* para mais informações
+sobre a plataforma de automação `ctrlX Automation <https://apps.boschrexroth.com/microsites/ctrlx-automation/en/>`_.
 
-.. note::
-
-   This project is under active development.
-
-Contents
+Conteúdo
 --------
 
 .. toctree::
 
-   usage
-   api
+   install
+   configure
+   acquire

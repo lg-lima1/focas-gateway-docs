@@ -2,12 +2,12 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'FOCAS 2 Gateway'
+copyright = '2022, Luiz Lima'
+author = 'Luiz Lima'
 
-release = '0.1'
-version = '0.1.0'
+release = '1.0-beta'
+version = '1.0-beta'
 
 # -- General configuration
 
