@@ -23,8 +23,8 @@ Initially, the user must know the network configurations of the FANUC controller
   :alt: FANUC FOCAS 2 Port
 
 In this example, the FANUC controller has the following configurations:
-  IP Address    ``192.168.10.51``
-  FOCAS 2 port  ``8193``
+  - IP Address:     *192.168.10.51*
+  - Port number:    *8193*
 
 The *ctrlX CORE* has two network interfaces, ``eth0`` and ``eth1``. In this example, ``eth0`` is physically connected to superior instances e.g. a local network, a server or to the internet, and the ``eth1`` is physically connected to a FANUC controller. The network configuration of the *ctrlX CORE* has to reflect this topology. This means that the ``eth1`` interface must be at the same subnet as the FANUC controller, as only by this they can see each other.
 
