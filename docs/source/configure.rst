@@ -1,17 +1,18 @@
-Configuração
+Configuration
 ============
 
-.. _configurações:
+.. _configurations:
 
-Configurações de Comunicação
+Network Configuration
 ----------------------------
-Considere como um exemplo a topologia abaixo:
+
+Use the following topology as an example.
 
 .. image:: imgs/configure/1-network-topology.png
   :width: 600
   :alt: Network Topology
 
-Inicialmente, deve-se ter conhecimento das configurações do comando CNC Fanuc. Para isso, acesse as telas abaixo no comando para ter conhecimento do endereço ip e a porta do protocolo FOCAS 2.
+Initially, the user must know the network configurations of the FANUC controller. Theses configurations can be checked in the following screens of the controller. Note down the IP address and the FOCAS 2 protocol port of the FANUC controller, we will use it soon.
 
 .. image:: imgs/configure/2-fanuc-ipaddress.png
   :width: 250
@@ -21,30 +22,28 @@ Inicialmente, deve-se ter conhecimento das configurações do comando CNC Fanuc.
   :width: 250
   :alt: FANUC FOCAS 2 Port
 
-Nesse exemplo, sabe-se que o comando CNC Fanuc tem o endereço IP ``192.168.10.51`` e o protocolo FOCAS 2 está usando a porta ``8193``.
-  
-Como indicado na topologia, o ctrlX CORE possui duas interfaces de rede ``eth0`` e ``eth1``. Nesse exemplo, a porta ``eth0`` está conectado a sistemas superiores, uma rede local ou até mesmo na nuvem. E, a interface ``eth1`` está conectada a rede na qual está presente o comando CNC Fanuc. Obrigatóriamente, precisa-se configurar as interfaces de modo que elas estejam na mesma sub-rede da rede na qual estão conectadas.
+In this example, the FANUC controller has the following configurations:
+  IP Address    ``192.168.10.51``
+  FOCAS 2 port  ``8193``
 
-Então, nesse exemplo, a interface ``eth1`` deve estar configurada com o endereço IP ``192.168.10.1`` que pertence a mesma sub-rede do comando CNC Fanuc.
+The *ctrlX CORE* has two network interfaces, ``eth0`` and ``eth1``. In this example, ``eth0`` is physically connected to superior instances e.g. a local network, a server or to the internet, and the ``eth1`` is physically connected to a FANUC controller. The network configuration of the *ctrlX CORE* has to reflect this topology. This means that the ``eth1`` interface must be at the same subnet as the FANUC controller, as only by this they can see each other.
 
-Para isso, modifique as configurações das interfaces.
+For that, we need to modify the ``eth1`` interface assigning the respective IP address, in this example ``192.168.10.1``.
 
 .. image:: imgs/configure/5-change-ipaddress.png
   :width: 600
   :alt: Change ctrlX CORE IP Addresses
 
-Agora que o ctrlX CORE está na mesma faixa de rede do comando CNC Fanuc, precisa-se configurar o endereço IP do comando nas configurações do app *FOCAS 2 Gateway* para que ele consiga realizar a aquisição de dados usando o protocolo FOCAS 2.
-
-Dessa forma, a interface *ctrlX Datalayer* possibilita a modificação dessas configurações através do nó `focas-gatewya > cfg`.
+Now both devices are in the same network, but we still have additional configuration to do, at this time in the *FOCAS 2 Gateway* *ctrlX Datalayer* node `focas-gateway > cfg`.
 
 .. image:: imgs/configure/7-focas-gateway-cfg.png
   :width: 600
   :alt: FOCAS 2 Gateway Configuration node
 
-Para alterar alguma configuração, clique na variável dentro do nó, escreva o novo valor e por fim, clique no botão `write` para salvar as modificações.
+In order to change the configuration, select a node, write the new value and click on `write` to apply the modifications.
 
 .. image:: imgs/configure/8-cfg-change-ipaddress.png
   :width: 600
   :alt: FOCAS 2 Gateway IP Address configuration
 
-Na próxima seção, descreve-se todos os dados que podem ser aquisitados através do protocolo FOCAS 2. :ref:`aquisição`.
+In the next section, we will cover all the different data that can be collected using the *FOCAS 2 Gateway App* :ref:`acquire`.

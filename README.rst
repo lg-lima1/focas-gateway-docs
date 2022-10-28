@@ -1,9 +1,7 @@
-Template for the Read the Docs tutorial
+FOCAS 2 Gateway App
 =======================================
 
-This GitHub template includes fictional Python library
-with some basic Sphinx docs.
+This is the documentation repository for the app. Please refer to 
+https://focas-gateway.readthedocs.io/ for further information.
 
-Read the tutorial here:
-
-https://docs.readthedocs.io/en/stable/tutorial/
+Also you can directly contact me at luiz.lima@boschrexroth.com.br.

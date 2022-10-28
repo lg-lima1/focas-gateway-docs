@@ -1,18 +1,20 @@
-Aquisição
+Acquire
 =========
 
-Essa seção tem como objetivo descrever as diversas informações que podem ser coletadas do comando CNC Fanuc configurado na seção anterior através do ctrlX Datalayer.
-A estrutura dessa seção descreve cada dado coletado como um `node` dentro do ctrlX Datalayer. 
-Todos os dados requisitados retornam um objeto `JSON` como representação do dado. Mais informações sobre a estrutura retornada estão na descrição de cada node.
+This section shows the different types of data that can be acquired from the FANUC controller configured in the last section :ref:`configurations`. Each type of data is described in this section as a `node` inside the ``ctrlX Datalayer``.
+
+All nodes that implement the `read` method return a `JSON` object as a representation of the data. More information about the object strucutre is detailed in each `node` description.
+
+This sections requires a basic understanding on how the ``ctrlX Datalayer`` works and what functionalities it has. Please refer to the `ctrlX Datalayer <https://developer.community.boschrexroth.com/t5/Store-and-How-to/FAQ-for-ctrlX-Data-Layer/ba-p/21236>`_ documentation for more information.
 
 .. autosummary::
 
 alarm
 -----
 
-O node **focas-gateway > alarm** coleta o estado de todos os bits de alarme do comando NC, assim como a mensagem descritiva dos alarmes ativos.
+The `node` **focas-gateway > alarm** acquire the alarm status bits from the controller, as well as the alarm description message.
 
-Esse node somente implementa o método `read`. Quando chamado retornará um objeto `JSON` com a estrutura abaixo.
+This `node` only implementes the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -41,11 +43,11 @@ Esse node somente implementa o método `read`. Quando chamado retornará um obje
 axis-data
 ---------
 
-O node **focas-gateway > axis-data** representa o estado atual de eixos de posicionamento do comando NC e contém child nodes (ou, nós filhos) representando cada eixo. A informação da quantidade de eixos, assim como o nome do eixo, é coletado durante a execução do programa de forma dinâmica.
+The `node` **focas-gateway > axis-data** represents the actual positioning axis status with each axis currently available in the FANUC controller represented as a `child node`. The currently available axis are loaded dynamically during the execution of the app.
 
-Esse node implementa o método `browse`. Quando chamado retornará uma lista dos child nodes, que representam o nome o nome de cada eixo.
+This `node` implements the `browse` method. When called, it will return a list of `child nodes` that represent the name of each axis currently available at the FANUC controller.
 
-Nesse exemplo, temos um comando NC com três eixos, X, Y e Z, respectivamente. Chamando o método `browse`, nos retornará:
+As an example, a FANUC controller has three axis, X, Y and Z. Calling `browse` method, will return:
 
 .. code-block:: json
 
@@ -55,9 +57,9 @@ Nesse exemplo, temos um comando NC com três eixos, X, Y e Z, respectivamente. C
         "Z"
     ]
 
-Cada eixo (child node) implementa o método `read`. Dessa forma, quando chamado retornará um objeto `JSON` representando o estado atual do eixo requisitado. A estrutura é idêntica entre todos os eixos.
+Each axis or `child node` implements the `read` method individually. When called, it returns a `JSON` object representing the actual status of that axis. The same data structure is applied to all axis.
 
-Nesse exemplo, estamos lendo os dados do eixo X através do node `focas-gateway > axis-data > X`. Chamando o método `read`, nos retornará:
+As an example, the X axis status can be acquired through the `node` `focas-gateway > axis-data > X`. Calling `read` method, will return a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -106,19 +108,13 @@ Nesse exemplo, estamos lendo os dados do eixo X através do node `focas-gateway 
 parameters
 ----------
 
-O node **focas-gateway > parameters** representa o valor de parâmetros do comando NC e contém child nodes (oun nós filhos) para cada parâmetro. Os parâmetros a serem requisitados são informados pelo usuário através do próprio ctrlX Datalayer.
+The `node` **focas-gateway > parameters** represents the FANUC controller parameters with each requested parameter as a `child node`. The requested parameters are to be defined by the user through the ``ctrlX Datalayer`` usign the `create` method.
 
-Esse node implementa o método `create`. Ao executá-lo é preciso que o usuário informe qual o parâmetro a ser lido (em formato numérico) no corpo da requisição, caso contrário, o método retornará erro.
+This `node` implements the `create` method. When calling it, the user must inform the address of the requested parameter as an `integer` in the method itself. Failing to do so will result in an error.
 
-Nesse exemplo vamos cadastrar o parâmetro ``1020`` usando o node **focas-gateway > parameters**. 
+This `node` also implements the `browse` method. When called, it returns a list of your `child nodes`, where each one is a representation of the parameters previously requested usign the `create` method.
 
-.. code-block:: json
-
-    1020
-
-Esse node também implementa o método `browse`. Ao executá-lo, o método retornará uma lista de todos seus child nodes, onde cada child node é uma representação dos parâmetros previamente cadastrados pelo método `create`.
-
-Nesse exemplo, usando o node **focas-gateway > parameters**, vemos que temos cadastrados os parâmetros ``1020`` e ``1320``.
+As an example, calling `browse` method on `node` **focas-gateway > parameters** returns the parameters ``1020`` and ``1320``.
 
 .. code-block:: json
 
@@ -127,9 +123,9 @@ Nesse exemplo, usando o node **focas-gateway > parameters**, vemos que temos cad
         1320
     ]
 
-Cada parâmetro (child node) implementa o método `read`. Dessa forma, quando chamado retornará um objeto `JSON` representando o estado atual do parâmetro requisitado. A quantidade de posições no array varia de acordo com o parâmetro: se ele representa um parâmetro de sistema, deve ser um array de uma posição; se ele representa um parâmetro de eixo, deve ser um array de tamanho igual a quantidade de eixos do sistema.
+Each parameter or `child node` implements the `read` method. When called, it returns a `JSON` object that represents the actual value of the requested parameter. Some parameters represent a single system parameter, while others might represent axis parameters. The size of the returned value array may vary according to the requested parameter to reflect that.
 
-Nesse exemplo, usando o node **focas-gateway > parameters > 1020**, o método `read` nos retornará:
+As an example, calling the `read` method on `node` **focas-gateway > parameters > 1020**, will return a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -140,9 +136,9 @@ Nesse exemplo, usando o node **focas-gateway > parameters > 1020**, o método `r
 pmc-alarm
 ---------
 
-O node **focas-gateway > pmc-alarm** representa as mensagens de alarme presentes no comando NC no momento da requisição que foram acionadas durante a execução do programa PMC.
+The `node` **focas-gateway > pmc-alarm** represents alarm messages present at the FANUC controller that were raised by the PMC runtime execution.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -153,19 +149,13 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 pmc-data
 --------
 
-O node **focas-gateway > pmc-data** representa o valor de endereços de memória do programa PMC do comando NC e contém child nodes (ou nós filhos) para cada endereço. Os endereços a serem requisitados são informados pelo usuário através do próprio ctrlX Datalayer.
+The `node` **focas-gateway > pmc-data** represents the requested PMC memory addresses values with each requested PMC memory address as a `child node`. The requested addresses are to be defined by the user through the ``ctrlX Datalayer`` usign the `create` method.
 
-Esse node implementa o método `create`. Ao executá-lo é preciso que o usuário informe qual o endereço a ser lido (em formato textual) no corpo da requisição, caso contrário, o método retornará erro. Adicionalmente, o endereço a ser cadastrado deve ser válido, no seguinte formato ``X1234``, onde: X, é um único caractére que representa a categoria do endereço de memória, e posteriormente, quatro dígitos seguidos. Consultar o manual de parâmetros da Fanuc para a família do comando para mais informações.
+This `node` implements the `create` method. When calling this method, the user must inform the address of the requested PMC memory address as an `string` in the method itself. Failing to do so will result in an error. Additionaly, the requested PMC memory address must be valid and follow the following format ``X1234``,  where *X* is a character that represents the type of memory address, followed by 4 digits. Please refer to your FANUC controller on more information about PMC memory addresses types.
 
-Nesse exemplo vamos cadastrar o endereço ``C0034`` usando o node **focas-gateway > parameters**. 
+This `node` also implements the `browse` method. When called, it returns a list of `child nodes`, where each one is a representation of the PMC memory addresses previously requested usign the `create` method.
 
-.. code-block:: json
-
-    C0034
-
-Esse node também implementa o método `browse`. Ao executá-lo, o método retornará uma lista de todos seus child nodes, onde cada child node é uma representação dos endereços de memória previamente cadastrados pelo método `create`.
-
-Nesse exemplo, usando o node **focas-gateway > pmc-data**, vemos que temos cadastrados os parâmetros ``C0034`` e ``C0126``.
+As an example, calling `browse` method on `node` **focas-gateway > pmc-data**, it returns the PMC memory addresses ``C0034`` and ``C0126``. ``C`` stands for counter in the PMC memory address types.
 
 .. code-block:: json
 
@@ -174,9 +164,7 @@ Nesse exemplo, usando o node **focas-gateway > pmc-data**, vemos que temos cadas
         C0126
     ]
 
-Cada parâmetro (child node) implementa o método `read`. Dessa forma, quando chamado retornará um objeto `JSON` representando o valor atual no endereço de memória requisitado.
-
-Nesse exemplo, usando o node **focas-gateway > pmc-data > C0034**, o método `read` nos retornará:
+Each PMC memory address or `child node` implements the `read` method. When called, it returns a `JSON` object that represents the actual value of that PMC memory address. As an example, calling the `read` method on `node` **focas-gateway > pmc-data > C0034**, will return a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -187,9 +175,9 @@ Nesse exemplo, usando o node **focas-gateway > pmc-data > C0034**, o método `re
 pmc-title
 ---------
 
-O node **focas-gateway > pmc-title** retorna informações referentes ao programa PMC carregado no comando NC. Essas informações são inseridas pelo desenvolvedor do programa PMC e estão atreladas ao programa em execução no comando NC.
+The `node` **focas-gateway > pmc-title** represents informations about the loaded PMC project on the FANUC controller. These informations are bound by the developer to the PMC project.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -209,9 +197,9 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 program-info
 ------------
 
-O node **focas-gateway > program-info** contém informações referentes ao nome e número do programa em execução, assim como a quantidade de programas registrados e a memória do comando utilizada para armazenamento dos programas.
+The `node` **focas-gateway > program-info** represents information about the loaded NC program, as well as the available file count and memory size for storage of the NC programs.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -228,9 +216,9 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 speed-data
 ----------
 
-O node **focas-gateway > speed-data** contém informações referentes a velocidade dos eixos de posicionamento e spindles controlados pelo comando NC.
+The `node` **focas-gateway > speed-data** represents the speed data from the positioning axis and spindles available at the FANUC controller.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -257,9 +245,9 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 spindle-data
 ------------
 
-O node **focas-gateway > spindle-data** contém informações referentes ao eixo spindle como, sua carga e sua velocidade, parametrizada e real.
+The `node` **focas-gateway > spindle-data** represents informations about the spindle axis available at the FANUC controller. It shows spindle actual load and actual motor speed.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -291,9 +279,9 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 status-info
 -----------
 
-O node **focas-gateway > status-info** contém informações referentes aos modos de operação do comando NC, assim como status de alguns módulos de monitoramento como emergência e alarme.
+The `node` **focas-gateway > status-info** represents informations about the different operation modes of the FANUC controller, as well as status from emergency and alarm monitoring systems.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -312,9 +300,9 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 system-info
 -----------
 
-O node **focas-gateway > system-info** contém informações referentes as características do comando NC, seu modelo, quantidade de eixos e módulos opcionais suportados.
+The `node` **focas-gateway > system-info** represents informations regarding the characteristics of the FANUC controller - model, axis count, supported axis count and aditional optional modules.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
@@ -336,11 +324,11 @@ Esse node implementa o método `read`. Ao executá-lo, o método retornará um o
 timers
 ------
 
-O node **focas-gateway > timers** contém informações referentes aos temporizadores internos do comando NC. Com esse node é possível monitorar os tempos de máquina ligada, em operação, em ciclo de corte, entre outros.
+The `node` **focas-gateway > timers** represents information regarding the internal timers of the FANUC controller. With this node it's possible to monitor controller power on time, in operation time, and others.
 
-A menos que esteja indicado, todos os valores são em segundos e atualizados a cada segundo.
+Unless noted, all values are in seconds and updated every second.
 
-Esse node implementa o método `read`. Ao executá-lo, o método retornará um objeto `JSON` com a estrutura abaixo.
+This `node` implements the `read` method. When called, it returns a `JSON` object with the following schema:
 
 .. code-block:: json
 
