@@ -2,12 +2,12 @@
 
 # -- Project information
 
-project = 'FOCAS 2 Gateway'
+project = 'FOCAS 2 Gateway App'
 copyright = '2022, Luiz Lima'
 author = 'Luiz Lima'
 
-release = '1.0-beta'
-version = '1.0-beta'
+release = '1.0'
+version = '1.0'
 
 # -- General configuration
 
